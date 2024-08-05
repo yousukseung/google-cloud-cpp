@@ -21,5 +21,6 @@ cc_binary(
     ],
     deps = [
         "@google_cloud_cpp//:spanner",
+        #"@com_google_absl//absl/time",
     ],
 )

@@ -329,11 +329,14 @@ class TupleStreamIterator {
   ///@}
 
   /// Default constructs an "end" iterator.
-  TupleStreamIterator() = default;
+  TupleStreamIterator() {
+    std::cout << "YSSEUNG TupleStreamIterator Created().\n" << std::flush;
+  }
 
   /// Creates an iterator that wraps the given `RowStreamIterator` range.
   TupleStreamIterator(RowStreamIterator begin, RowStreamIterator end)
       : it_(std::move(begin)), end_(std::move(end)) {
+    std::cout << "YSSEUNG TupleStreamIterator Created(begin, end).\n" << std::flush;
     ParseTuple();
   }
 
@@ -345,11 +348,15 @@ class TupleStreamIterator {
 
   TupleStreamIterator& operator++() {
     if (!tup_ok_) {
+      std::cout << "YSSEUNG TupleStreamIterator ++: NOT OK.\n" << std::flush;
       it_ = end_;
       return *this;
     }
+    std::cout << "YSSEUNG TupleStreamIterator ++: OK.\n" << std::flush;
     ++it_;
+    std::cout << "YSSEUNG TupleStreamIterator ++: Incremented.\n" << std::flush;
     ParseTuple();
+    std::cout << "YSSEUNG TupleStreamIterator ++: Done.\n" << std::flush;
     return *this;
   }
 
@@ -371,9 +378,16 @@ class TupleStreamIterator {
 
  private:
   void ParseTuple() {
-    if (it_ == end_) return;
+    std::cout << "YSSEUNG ParseTuple called.\n" << std::flush;
+    if (it_ == end_) {
+      std::cout << "YSSEUNG ParseTuple: END.\n" << std::flush;
+      return;
+    }
+    std::cout << "YSSEUNG ParseTuple NOT END.\n" << std::flush;
     tup_ = *it_ ? std::move(*it_)->template get<Tuple>() : it_->status();
+    std::cout << "YSSEUNG ParseTuple tup_ updated.\n" << std::flush;
     tup_ok_ = tup_.ok();
+    std::cout << "YSSEUNG ParseTuple tup_ok_ updated: " << tup_ok_ << "\n" << std::flush;
   }
 
   bool tup_ok_{false};

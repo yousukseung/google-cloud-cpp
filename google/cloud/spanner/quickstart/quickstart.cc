@@ -15,6 +15,7 @@
 //! [all]
 #include "google/cloud/spanner/client.h"
 #include <iostream>
+//#include "absl/time/clock.h"
 
 int main(int argc, char* argv[]) {
   if (argc != 4) {
@@ -26,12 +27,16 @@ int main(int argc, char* argv[]) {
   namespace spanner = ::google::cloud::spanner;
   spanner::Client client(
       spanner::MakeConnection(spanner::Database(argv[1], argv[2], argv[3])));
+  std::cout << "YSSEUNG Client created." << "\n" << std::flush;
 
   auto rows =
       client.ExecuteQuery(spanner::SqlStatement("SELECT 'Hello World'"));
+  std::cout << "YSSEUNG Rows created." << "\n" << std::flush;
 
   for (auto const& row : spanner::StreamOf<std::tuple<std::string>>(rows)) {
+    std::cout << "YSSEUNG Rows loop." << "\n" << std::flush;
     if (!row) {
+      std::cout << "YSSEUNG Error." << "\n" << std::flush;
       std::cerr << row.status() << "\n";
       return 1;
     }
